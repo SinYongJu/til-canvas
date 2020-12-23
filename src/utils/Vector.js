@@ -28,8 +28,8 @@ class Vector {
     return Math.sqrt(this.magSq());
   }
   magSq() {
-    let x = Math.round(this.x);
-    let y = Math.round(this.y);
+    let x = this.x;
+    let y = this.y;
     return x * x + y * y;
   }
   dist(vector) {
@@ -52,6 +52,13 @@ class Vector {
   }
   copy() {
     return new Vector(this.x, this.y);
+  }
+  // vertical
+  normal() {
+    return new Vector(this.y, -this.x);
+  }
+  dot(vector) {
+    return this.x * vector.x + this.y * vector.y;
   }
   // 외적
   static cross(v1, v2) {
