@@ -1,3 +1,5 @@
+import Vector from "../../utils/Vector";
+
 class SAT {
   constructor() {}
   resize(w, h) {
