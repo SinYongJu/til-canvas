@@ -1,3 +1,6 @@
+import { RADIAN_TO_DEG } from "../constants";
+import { random } from "./utils";
+
 class Vector {
   constructor(x, y, z) {
     this.x = x;
@@ -9,7 +12,7 @@ class Vector {
     this.y += vector.y;
     this.z += vector.z;
   }
-  sub() {
+  sub(vector) {
     this.x -= vector.x;
     this.y -= vector.y;
     this.z -= vector.z;
@@ -60,6 +63,31 @@ class Vector {
   dot(vector) {
     return this.x * vector.x + this.y * vector.y;
   }
+
+  /**
+   * radians = 2 * PI * (degrees / 360)
+   * 이므로
+   */
+
+  /**
+   * return radian
+   */
+  getAngle() {
+    return Math.atan2(this.y, this.x);
+    //  * RADIAN_TO_DEG;
+  }
+  /**
+   *
+   * @param {Vector} a
+   * @param {Vector} b
+   *
+   * return radian
+   */
+  betweenAtoBAngle(a, b) {
+    let dx = b.x - b.x;
+    let dy = b.y - b.y;
+    return Math.atan2(dy / dx);
+  }
   // 외적
   static cross(v1, v2) {
     // vector1 x vector2
@@ -88,6 +116,15 @@ class Vector {
   }
   static sub(v1, v2) {
     return new Vector(v1.x - v2.x, v1.y - v2.y);
+  }
+  // length 1 , random vector
+  static random2d() {
+    let x = random(-1, 1);
+    let y = random(-1, 1);
+    if (x === 0 && y === 0) {
+      return Vector.random2d();
+    }
+    return new Vector(x, y);
   }
 }
 

@@ -9,8 +9,9 @@ class CanvasSetup {
     this.isLoop = true;
     this.canvas = document.getElementById(CANVAS_ID);
     this.ctx = this.canvas.getContext(CANVAS_CONTEXT);
+
+    this.isTrailing = false;
     this.scale = 1;
-    // this.scale = window.devicePixelRatio > 1 ? 2 : 1; // maybe, i dont know
     window.addEventListener("resize", this.resizeCanvas.bind(this));
     this.resizeCanvas();
     window.requestAnimationFrame(this.animate.bind(this));
@@ -23,9 +24,9 @@ class CanvasSetup {
     this.ctx.scale(this.scale, this.scale);
     this.resize();
   }
-  animate() {
-    this.ctx.clearRect(0, 0, this.stageW, this.stageH);
-    this.draw(this.ctx);
+  animate(t) {
+    !this.isTrailing && this.ctx.clearRect(0, 0, this.stageW, this.stageH);
+    this.draw(this.ctx, t);
     if (this.isLoop) window.requestAnimationFrame(this.animate.bind(this));
   }
   noLoop() {
@@ -47,7 +48,7 @@ class CanvasSetup {
    *
    * canvas context
    */
-  draw(ctx) {}
+  draw(ctx, t) {}
 }
 
 export default CanvasSetup;

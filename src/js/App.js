@@ -1,55 +1,41 @@
 import CanvasSetup from "../utils/CanvasSetup";
-import { PI2 } from "../constants";
-import Grid from "./line/Grid";
-import StraightLine from "./line/StraightLine";
-import InnerSects from "./line/InnerSects";
+import { random } from "../utils/utils";
+import Vector from "../utils/Vector";
+import Firecracker from "./particle/Firecracker";
+import Particle from "./particle/Particle";
+import ParticleGroup from "./particle/ParticleGroup";
 
 class App extends CanvasSetup {
   constructor() {
     super();
-    this.lines = []
+    this.total = 100;
+    this.fireworks = [];
+    // this.wind = new Vector(0.02, 0);
 
-
-    this.lines.push(new StraightLine(-200, -50, 250, 50)); 
-    this.lines.push(new StraightLine(300, -50, -178, 50));
-
-    this.detector = new InnerSects()
-
-    this.grid = new Grid(this.stageW/2, this.stageH /2, {
-      isDash: true,
-    });
-
+    for (let i = 0; i < this.total; i++) {
+      this.fireworks[i] = new Firecracker(this.stageW, this.stageH);
+    }
     this.resize();
-
-    this.crossPoints = [];
   }
   resize() {
-    if (!!this.grid && this.lines) {
-      this.grid.resize(this.stageW, this.stageH);
-      for(let i =0; i < this.lines.length;i++) {
-        this.lines[i].resize(this.stageW, this.stageH);
+    if (this.fireworks && this.fireworks.length > 0) {
+      for (let i = 0; i < this.total; i++) {
+        this.fireworks[i].resize(this.stageW, this.stageH);
       }
     }
-   
   }
-  draw(ctx) {
-    this.grid.draw(ctx);
-
-    ctx.save();
-    ctx.translate(this.stageW / 2, this.stageH / 2);
-
-    for(let i =0; i < this.lines.length;i++) {
-      this.lines[i].draw(ctx);
-    }
-
-    console.log(this.detector.compare(this.lines[0].points,this.lines[1].points))
-    
-    ctx.beginPath();
-    ctx.fillStyle = "#FF0000";
-    ctx.arc(0, 0, 2, PI2, false);
+  draw(ctx, t) {
+    ctx.fillStyle = `rgba(0,0,0,0.8)`;
+    ctx.fillRect(0, 0, this.stageW, this.stageH);
+    ctx.rect(0, 0, this.stageW, this.stageH);
     ctx.fill();
-    ctx.restore();
-    this.noLoop();
+    for (let i = 0; i < this.total; i++) {
+      if (this.fireworks[i].isDead()) {
+        this.fireworks[i].init();
+      } else {
+        this.fireworks[i].draw(ctx, t);
+      }
+    }
   }
 }
 
